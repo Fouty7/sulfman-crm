@@ -30,6 +30,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "start": "vite build && vite serve",
     "local": "vite --host",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
