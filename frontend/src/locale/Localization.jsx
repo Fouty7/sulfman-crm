@@ -27,8 +27,8 @@ export default function Localization({ children }) {
       theme={{
         // algorithm: theme.darkAlgorithm,
         token: {
-          colorPrimary: '#1640D6',
-          colorLink: '#1640D6',
+          colorPrimary: '#7f9f9f',
+          colorLink: '#7f9f9f',
 
           // borderRadius: 8,
         },

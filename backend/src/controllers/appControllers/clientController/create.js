@@ -1,89 +1,110 @@
 const mongoose = require('mongoose');
-
 const People = mongoose.model('People');
 const Company = mongoose.model('Company');
 
 const create = async (Model, req, res) => {
-  // Creating a new document in the collection
-
-  if (req.body.type === 'people') {
-    if (!req.body.people) {
-      return res.status(403).json({
+  try {
+    // Validate required fields
+    if (!req.body.type) {
+      return res.status(400).json({
         success: false,
-        message: 'Please select a people',
+        message: 'Type is required',
       });
-    } else {
-      let client = await Model.findOne({
-        people: req.body.people,
-        removed: false,
-      });
+    }
 
-      if (client) {
-        return res.status(403).json({
+    if (req.body.type === 'people') {
+      if (!req.body.people) {
+        return res.status(400).json({
           success: false,
-          result: null,
-          message: 'Client Already Exist',
+          message: 'People is required',
         });
       }
 
-      let { firstname, lastname } = await People.findOneAndUpdate(
+      // Check if people exists and update related document
+      let people = await People.findOneAndUpdate(
         {
           _id: req.body.people,
           removed: false,
         },
         { isClient: true },
         {
-          new: true, // return the new result instead of the old one
+          new: true,
           runValidators: true,
         }
-      ).exec();
-      req.body.name = firstname + ' ' + lastname;
-      req.body.company = undefined;
-    }
-  } else {
-    if (!req.body.company) {
-      return res.status(403).json({
-        success: false,
-        message: 'Please select a company',
-      });
-    } else {
-      let client = await Model.findOne({
-        company: req.body.company,
-        removed: false,
-      });
+      );
 
-      if (client) {
-        return res.status(403).json({
+      if (!people) {
+        return res.status(404).json({
           success: false,
-          result: null,
-          message: 'Client Already Exist',
+          message: 'People not found',
         });
       }
-      let { name } = await Company.findOneAndUpdate(
+
+      req.body.name = `${people.firstname} ${people.lastname}`;
+      req.body.company = undefined;
+    } else if (req.body.type === 'company') {
+      if (!req.body.company) {
+        return res.status(400).json({
+          success: false,
+          message: 'Company is required',
+        });
+      }
+
+      // Check if company exists and update related document
+      let company = await Company.findOneAndUpdate(
         {
           _id: req.body.company,
           removed: false,
         },
         { isClient: true },
         {
-          new: true, // return the new result instead of the old one
+          new: true,
           runValidators: true,
         }
-      ).exec();
-      req.body.name = name;
+      );
+
+      if (!company) {
+        return res.status(404).json({
+          success: false,
+          message: 'Company not found',
+        });
+      }
+
+      req.body.name = company.name;
       req.body.people = undefined;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid type',
+      });
     }
+
+    if (!req.body.address) {
+      return res.status(400).json({
+        success: false,
+        message: 'Address is required',
+      });
+    }
+
+    req.body.address = req.body.address;
+
+    // Save the document
+    const result = await new Model(req.body).save();
+
+    // Returning successful response
+    return res.status(200).json({
+      success: true,
+      result,
+      message: 'Successfully created the document in Model',
+    });
+  } catch (error) {
+    console.error('Error creating document:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
   }
-
-  req.body.removed = false;
-  const result = await new Model(req.body).save();
-
-  // Returning successfull response
-  return res.status(200).json({
-    success: true,
-    result,
-    message: 'Successfully Created the document in Model ',
-  });
 };
 
 module.exports = create;
+

@@ -36,6 +36,10 @@ const schema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  address: {
+    type: String,
+    required: true,
+  },
 });
 
 schema.plugin(require('mongoose-autopopulate'));

@@ -9,7 +9,7 @@ export default ({ mode }) => {
   const proxy_url =
     process.env.VITE_DEV_REMOTE === 'remote'
       ? process.env.VITE_BACKEND_SERVER
-      : 'http://13.40.229.43:8888/';
+      : 'https://crm.sulfman.com:8888/';
 
   const config = {
     plugins: [react()],

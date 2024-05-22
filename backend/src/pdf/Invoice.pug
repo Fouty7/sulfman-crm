@@ -23,6 +23,10 @@ html
         box-sizing: inherit;
         color:#222
       }
+      .right.company-info {
+        max-width: 40%;
+      }
+
 
       .clearfix {
         display: block; }
@@ -59,7 +63,7 @@ html
       }
       h1.invoice{
         font-size:32px;
-        color:#52008c;
+        color:#004040;
         margin-top:0;
       }
       p.strong{
@@ -77,7 +81,7 @@ html
       }
 
       .tableHeader{
-        color:#52008c;
+        color:#004040;
       }
       .clearfix {
         display: block; }
@@ -204,7 +208,7 @@ html
       .table-invoice th {
         padding: 8px 10px;
         border-bottom: 1px solid #c2e0f2;
-        color:#52008c;
+        color:#004040;
         white-space: nowrap;
         font-weight: 700;
         font-size: 12px;
@@ -260,11 +264,11 @@ html
     
       header.clearfix
         .top-area
-          //- img.logo.left(src=settings.idurar_server_url+settings.company_logo)
+          img.logo.left(src=`${settings.idurar_server_url}${settings.company_logo}`)
           .right.company-info
               p.strong #{settings.company_name}
               p #{settings.company_address}
-              p #{settings.company_reg_number}
+              p RC no.: #{settings.company_reg_number}
               
         .col.col-24
           .space  
@@ -324,3 +328,4 @@ html
           
 
    
+

@@ -11,22 +11,6 @@ const remove = async (Model, req, res) => {
 
   // first find if there alt least one quote or invoice exist corresponding to the client
   const client = await Client.findOne({ company: id, removed: false }).exec();
-  if (client) {
-    return res.status(400).json({
-      success: false,
-      result: null,
-      message: 'Cannot delete company if company attached to any people or she is client',
-    });
-  }
-  const people = await People.findOne({ company: id, removed: false }).exec();
-  if (people) {
-    return res.status(400).json({
-      success: false,
-      result: null,
-      message: 'Cannot delete company if company attached to any people or she is client',
-    });
-  }
-
   // if no People or quote, delete the client
   const result = await Model.findOneAndUpdate(
     { _id: id, removed: false },

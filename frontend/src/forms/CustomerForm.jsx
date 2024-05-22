@@ -103,6 +103,20 @@ export default function CustomerForm({ isUpdateForm = false }) {
       >
         <Input />
       </Form.Item>
+
+      {/* Add the address field here */}
+      <Form.Item
+        label={translate('Address')}
+        name="address"
+        rules={[
+          {
+            validator: validateEmptyString,
+          },
+        ]}
+      >
+        <Input.TextArea />  {/* Use Input.TextArea for multi-line address */}
+      </Form.Item>
     </>
   );
 }
+
